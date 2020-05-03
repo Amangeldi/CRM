@@ -107,6 +107,7 @@ namespace CRM.WEB
             services.AddTransient(typeof(IUserRegistrationService), typeof(UserRegistrationService));
             services.AddTransient(typeof(IRegionService), typeof(RegionService));
             services.AddTransient(typeof(ICountryService), typeof(CountryService));
+            services.AddTransient(typeof(IQualificationService), typeof(QualificationService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
