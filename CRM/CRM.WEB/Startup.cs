@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CRM.BLL.Interfaces;
+using CRM.BLL.Services;
 using CRM.DAL.EF;
 using CRM.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,16 +23,29 @@ using Microsoft.OpenApi.Models;
 
 namespace CRM.WEB
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Startup ctor
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        /// <summary>
+        /// Configuration
+        /// </summary>
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
@@ -76,9 +91,9 @@ namespace CRM.WEB
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "PHARMACY API",
+                    Title = "CRM API",
                     Version = "v0.1.0",
-                    Description = "API для взаимодействия с интерфейсом сайта euro-derman",
+                    Description = "API для взаимодействия с интерфейсом CRM",
                     Contact = new OpenApiContact
                     {
                         Email = "Annaklychev1@gmail.com",
@@ -89,9 +104,15 @@ namespace CRM.WEB
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddTransient(typeof(IUserRegistrationService), typeof(UserRegistrationService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
