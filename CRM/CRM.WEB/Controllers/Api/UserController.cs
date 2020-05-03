@@ -71,8 +71,16 @@ namespace CRM.WEB.Controllers.Api
         [HttpGet("GetUsers")]
         public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetUsers()
         {
-
             return Ok( await userService.GetUsers());
+        }
+        /// <summary>
+        /// Получить всех пользователей с конкретной ролью
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetRoleUsers/{RoleName}")]
+        public async Task<ActionResult<IEnumerable<GetUserDTO>>> GetRoleUsers(string RoleName)
+        {
+            return Ok(await userService.GetRoleUsers(RoleName));
         }
         /// <summary>
         /// Редактировать User-а
@@ -96,5 +104,6 @@ namespace CRM.WEB.Controllers.Api
             await userService.DeleteUser(id);
             return Ok();
         }
+        
     }
 }
