@@ -87,7 +87,6 @@ namespace CRM.BLL.Services
         public async Task<IEnumerable<string>> GetUserRoles(string UserId)
         {
             User user = await _userManager.FindByIdAsync(UserId);
-            var r = await _userManager.GetRolesAsync(user);
             return  await _userManager.GetRolesAsync(user);
         }
 
