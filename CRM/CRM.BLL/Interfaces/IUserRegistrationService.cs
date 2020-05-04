@@ -16,5 +16,6 @@ namespace CRM.BLL.Interfaces
         Task<GetUserDTO> UpdateUser(GetUserDTO UserDTO);
         Task<IEnumerable<string>> GetUserRoles(string UserId);
         Task<IEnumerable<GetUserDTO>> GetRoleUsers(string RoleName);
+        Task<string> GetUserFullName(string userId);
     }
 }

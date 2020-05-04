@@ -84,6 +84,12 @@ namespace CRM.BLL.Services
             return DTO;
         }
 
+        public async Task<string> GetUserFullName(string userId)
+        {
+            GetUserDTO user = await GetUser(userId);
+            return user.FirstName + " " + user.LastName;
+        }
+
         public async Task<IEnumerable<string>> GetUserRoles(string UserId)
         {
             User user = await _userManager.FindByIdAsync(UserId);
