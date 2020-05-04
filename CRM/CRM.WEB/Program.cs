@@ -44,7 +44,7 @@ namespace CRM.WEB
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:1246");
+                    webBuilder.UseUrls("http://*:1111");
                 });
     }
 }

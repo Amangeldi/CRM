@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CRM.RAZOR</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <header>
+        @ViewData["header"] 
+    </header>
+    <div class="container row">
+        <div class="content">
+            @RenderBody()
+        </div>
+        <div class="sidebar">
+            @ViewData["sidebar"]
+        </div>
+    </div>
+
+    <footer>
+        @ViewData["footer"]
+    </footer>
+</body>
+</html>
