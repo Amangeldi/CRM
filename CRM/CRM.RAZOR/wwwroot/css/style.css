@@ -1,4 +1,6 @@
-﻿
+﻿*{
+    box-sizing: border-box;
+}
 body {
     color: white;
     font-size: 30px;
@@ -24,10 +26,12 @@ body {
     display: block;
 }
 /* close commented backslash hack */
-.content {
+.inner-content {
     min-height: 300px;
     background: #232758;
-    width: 70%;
+}
+.content {
+    width: 60%;
     float: left;
 }
 header{
@@ -35,11 +39,27 @@ header{
     background: #232758;
     margin-bottom:10px;
 }
-.sidebar {
+.inner-sidebar-1 {
     background: #232758;
     min-height: 300px;
-    width: 30%;
+}
+
+.sidebar-1 {
+    background: red;
+    width: 20%;
     float: left;
+    padding-right: 10px;
+}
+.inner-sidebar-2 {
+    background: #232758;
+    min-height: 300px;
+}
+
+.sidebar-2 {
+    background: red;
+    width: 20%;
+    float: left;
+    padding-left: 10px;
 }
 footer {
     height: 200px;

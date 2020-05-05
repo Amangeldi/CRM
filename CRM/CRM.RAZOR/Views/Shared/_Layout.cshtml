@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    int x = 0;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -11,11 +14,20 @@
         @ViewData["header"] 
     </header>
     <div class="container row">
-        <div class="content">
-            @RenderBody()
+        <div class="sidebar-1">
+            <div class="inner-sidebar-1">
+                @ViewData["sidebar"] @{++x;} @x
+            </div>
         </div>
-        <div class="sidebar">
-            @ViewData["sidebar"]
+        <div class="content">
+            <div class="inner-content">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="sidebar-2">
+            <div class="inner-sidebar-2">
+                @ViewData["sidebar"] @{++x;} @x
+            </div>
         </div>
     </div>
 
