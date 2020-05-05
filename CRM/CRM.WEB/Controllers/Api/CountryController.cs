@@ -23,7 +23,6 @@ namespace CRM.WEB.Controllers.Api
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="service"></param>
         public CountryController(ICountryService service, IRegionService regionService)
         {
             countryServ = service;

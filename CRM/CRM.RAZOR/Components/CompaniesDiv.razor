@@ -1,0 +1,70 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@code{
+    [Parameter]
+    public string NewCompany { get; set; } = "block";
+    [Parameter]
+    public string Qualufied { get; set; } = "none";
+    [Parameter]
+    public string NotQualified { get; set; } = "none";
+    public int x = 0;
+}
+    <div class="qualification">
+        <div class="new-companies">
+            <div class="title-new-companies">
+                element @{++x;} @x
+            </div>
+            <div class="content-new-companies" style="display:@NewCompany" @onclick(openNewCompaniesDiv)>
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+            </div>
+        </div>
+        <div class="qualified">
+            <div class="title-qualified">
+                element @{++x;} @x
+            </div>
+            <div class="content-qualified" style="display:@Qualufied" @onclick(openQualifiedDiv)>
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+            </div>
+        </div>
+        <div class="not-qualified">
+            <div class="title-not-qualified">
+                element @{++x;} @x
+            </div>
+            <div class="content-not-qualified" style="display:@NotQualified" @onclick(openNotQualifiedDiv)">
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+                elementP @{++x;} @x <br />
+            </div>
+        </div>
+        <button @onclick(openNewCompaniesDiv)>Click me</button>
+    </div>
+
+@functions{
+    void openNewCompaniesDiv()
+    {
+        NewCompany = "block";
+        Qualufied = "none";
+        NotQualified = "none";
+    }
+    void openQualifiedDiv()
+    {
+        NewCompany = "none";
+        Qualufied = "block";
+        NotQualified = "none";
+    }
+    void openNotQualifiedDiv()
+    {
+        NewCompany = "none";
+        Qualufied = "none";
+        NotQualified = "block";
+    }
+}

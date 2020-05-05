@@ -1,6 +1,9 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using CRM.RAZOR.Components
-
+﻿@page "/"
+@namespace CRM.BLAZOR.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,11 +14,13 @@
 </head>
 <body>
     <header>
-        @ViewData["header"]
+        <div class="inner-header">
+            @ViewData["header"]
+        </div>
     </header>
     <div class="container row">
-        <div class="sidebar-1">
-            <div class="inner-sidebar-1">
+        <div class="sidebar sidebar-1">
+            <div class=" inner-sidebar-1">
                 @ViewData["sidebar"]
                 <applet></applet>
                 <component type="typeof(CompaniesDiv)" render-mode="ServerPrerendered" />
@@ -23,18 +28,23 @@
         </div>
         <div class="content">
             <div class="inner-content">
-                @RenderBody()
+                @ViewData["body"]
             </div>
         </div>
-        <div class="sidebar-2">
-            <div class="inner-sidebar-2">
+        <div class="sidebar sidebar-2">
+            <div class=" inner-sidebar-2">
+                @ViewData["sidebar"]
+            </div>
+            <div class=" inner-sidebar-22">
                 @ViewData["sidebar"]
             </div>
         </div>
     </div>
-
     <footer>
-        @ViewData["footer"]
+        <div class="inner-footer">
+            @ViewData["footer"]
+        </div>
     </footer>
+    <script src="_framework/blazor.server.js"></script>
 </body>
 </html>
