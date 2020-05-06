@@ -1,123 +1,73 @@
-﻿* {
-    box-sizing: border-box;
-}
-
-body {
-    color: white;
+﻿*{
+    color:white;
     font-size: 20px;
-    height: 100vh;
-}
 
-.RTitle {
-    font-size: 23px;
-    color: black;
-    background: #40b470;
 }
-
-.row:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: " ";
-    clear: both;
-    height: 0;
+.title{
+    color:black;
+    font-size:23px;
 }
-
-.row {
-    display: inline-block;
+a{
+    color:white;
 }
-/* start commented backslash hack \*/
-* html .row {
-    height: 1%;
+a:visited{
+    color:yellow;
 }
-
-.row {
-    display: block;
-}
-/* close commented backslash hack */
-.inner-content {
-    min-height: 300px;
-    background: #232758;
-}
-
-.content {
-    width: 60%;
-    height: 100%;
-    float: left;
+header {
+    min-height: 100px;
+    background-color: red;
 }
 
 .container {
-    height: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: "a b b b c";
+}
+.left {
+    grid-area: a;
+    min-height: 230px;
+    height: calc(100vh - 110px);
+    background-color: #8bcfea;
+    display: grid;
+    /*grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;*/
 }
 
-.sidebar {
-    height: 100%;
+.title-new-companies {
+    grid-area: title-new-companies;
 }
 
-.inner-header {
-    margin-bottom: 10px;
-    background: #232758;
-    min-height: 50px;
+.title-qualified {
+    grid-area: title-qualified;
 }
 
-header {
-    height: 10%;
+.content-new-companies {
+    grid-area: content;
+}
+.content{
+    background:#0926d7;
+}
+.content-qualified {
+    grid-area: content;
 }
 
-.inner-sidebar-1 {
-    background: #232758;
-    min-height: 300px;
-    height: 100%;
+.content-not-qualified {
+    grid-area: content;
 }
 
-.sidebar-1 {
-    background: red;
-    width: 20%;
-    float: left;
-    padding-right: 10px;
+.title-not-qualified {
+    grid-area: title-not-qualified;
 }
 
-.inner-sidebar-2 {
-    background: #232758;
-    height: 50%;
+.center {
+    grid-area: b;
+    min-height: 230px;
+    height: calc(100vh - 110px);
+    background-color: royalblue;
 }
 
-.inner-sidebar-22 {
-    background: #232758;
-    height: 50%;
-}
-
-.sidebar-2 {
-    background: red;
-    width: 20%;
-    float: left;
-    padding-left: 10px;
-}
-
-.inner-footer {
-    background: #232758;
-    margin-top: 10px;
-    min-height: 50px;
-}
-
-footer {
-    height: 10%;
-}
-
-.RContent {
-    height: 90%;
-}
-
-.qualification {
-    height: 100%;
-    background: #42a8a2;
-}
-
-.new-companies {
-}
-
-.qualified {
-}
-
-.not-qualified {
+.right {
+    grid-area: c;
+    min-height: 230px;
+    height: calc(100vh - 110px);
+    background-color: saddlebrown;
 }

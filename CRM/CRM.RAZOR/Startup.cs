@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CRM.BLL.Interfaces;
+using CRM.BLL.Services;
+using CRM.DAL.EF;
+using CRM.DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +33,19 @@ namespace CRM.RAZOR
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddControllersWithViews();
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApiContext>();
+            services.AddIdentityCore<User>()
+                .AddEntityFrameworkStores<ApiContext>();
+            services.AddControllersWithViews();
+            services.AddDbContext<ApiContext>(options =>
+                options.UseSqlServer(connection));
+            services.AddTransient(typeof(IUserRegistrationService), typeof(UserRegistrationService));
+            services.AddTransient(typeof(IRegionService), typeof(RegionService));
+            services.AddTransient(typeof(ICountryService), typeof(CountryService));
+            services.AddTransient(typeof(IQualificationService), typeof(QualificationService));
+            services.AddTransient(typeof(ICompanyService), typeof(CompanyService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

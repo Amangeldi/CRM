@@ -54,7 +54,8 @@ namespace CRM.DAL.Data
                     CompanyLegalName = "ATM ATM Pty Ltd", 
                     HGBasedInCountry = Australia, 
                     Qualification = NewCompany, 
-                    TradingName = "A.C.N." 
+                    TradingName = "A.C.N." ,
+                    Website = "turkmen-tranzit.com"
                 };
                 Company ATM = new Company
                 {
@@ -63,7 +64,8 @@ namespace CRM.DAL.Data
                     Qualification = Qualified,
                     TradingName = "ATM",
                     LeadOwner = lead,
-                    QualifiedDate = DateTime.Now
+                    QualifiedDate = DateTime.Now,
+                    Website = "ttweb.org"
                 };
                 Company Pay = new Company
                 {

@@ -6,22 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CRM.RAZOR.Models;
+using CRM.BLL.Interfaces;
 
 namespace CRM.RAZOR.Controllers
 {
     public class HomeController : Controller
     {
-
-        public HomeController()
+        ICompanyService companyServ;
+        public HomeController(ICompanyService companyService)
         {
+            companyServ = companyService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Титуль";
             ViewData["footer"] = "Футер";
-            ViewData["sidebar"] = "Сайдбар";
+            ViewData["sidebar"] = "";
             ViewData["header"] = "Хедр";
+            //ViewData["companies"] = await companyServ.GetCompanies();
             return View();
         }
 

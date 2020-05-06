@@ -1,1 +1,26 @@
-﻿ююю
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using CRM.RAZOR.Components
+@{ Layout = null;}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CRM.RAZOR</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <header>
+    </header>
+    <div class="container">
+        <component type="typeof(CompaniesDiv)" render-mode="Server" />
+        <div class="center">
+
+        </div>
+        <div class="right">
+
+        </div>
+    </div>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

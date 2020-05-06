@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\CRM.BLL\CRM.BLL.csproj" />
+  </ItemGroup>
 
 
 </Project>
