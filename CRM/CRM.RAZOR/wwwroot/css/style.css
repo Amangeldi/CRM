@@ -1,10 +1,19 @@
-﻿*{
+﻿* {
     box-sizing: border-box;
 }
+
 body {
     color: white;
-    font-size: 30px;
+    font-size: 20px;
+    height: 100vh;
 }
+
+.RTitle {
+    font-size: 23px;
+    color: black;
+    background: #40b470;
+}
+
 .row:after {
     visibility: hidden;
     display: block;
@@ -30,18 +39,35 @@ body {
     min-height: 300px;
     background: #232758;
 }
+
 .content {
     width: 60%;
+    height: 100%;
     float: left;
 }
-header{
-    height: 70px;
-    background: #232758;
-    margin-bottom:10px;
+
+.container {
+    height: 80%;
 }
+
+.sidebar {
+    height: 100%;
+}
+
+.inner-header {
+    margin-bottom: 10px;
+    background: #232758;
+    min-height: 50px;
+}
+
+header {
+    height: 10%;
+}
+
 .inner-sidebar-1 {
     background: #232758;
     min-height: 300px;
+    height: 100%;
 }
 
 .sidebar-1 {
@@ -50,9 +76,15 @@ header{
     float: left;
     padding-right: 10px;
 }
+
 .inner-sidebar-2 {
     background: #232758;
-    min-height: 300px;
+    height: 50%;
+}
+
+.inner-sidebar-22 {
+    background: #232758;
+    height: 50%;
 }
 
 .sidebar-2 {
@@ -61,11 +93,31 @@ header{
     float: left;
     padding-left: 10px;
 }
-footer {
-    height: 50px;
+
+.inner-footer {
     background: #232758;
     margin-top: 10px;
+    min-height: 50px;
 }
-.qualification{
-    height:100%;
+
+footer {
+    height: 10%;
+}
+
+.RContent {
+    height: 90%;
+}
+
+.qualification {
+    height: 100%;
+    background: #42a8a2;
+}
+
+.new-companies {
+}
+
+.qualified {
+}
+
+.not-qualified {
 }

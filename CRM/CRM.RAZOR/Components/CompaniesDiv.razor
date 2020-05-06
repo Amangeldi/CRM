@@ -14,54 +14,61 @@
     public string NotQualified { get; set; } = "none";
     public int x = 0;
 }
-    <div class="qualification">
-        <div class="new-companies">
-            <div class="title-new-companies">
-                element @{++x;} @x
-            </div>
-            <div class="content-new-companies" style="display:@NewCompany" @onclick(openNewCompaniesDiv)>
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-            </div>
+<div class="qualification">
+    <div class="RQ new-companies" @onclick="openNewCompaniesDiv">
+        <div class="RTitle title-new-companies">
+            Новые компании
         </div>
-        <div class="qualified">
-            <div class="title-qualified">
-                element @{++x;} @x
-            </div>
-            <div class="content-qualified" style="display:@Qualufied" @onclick(openQualifiedDiv)>
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-            </div>
+        <div class="RContent content-new-companies" style="display:@NewCompany">
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
         </div>
-        <div class="not-qualified">
-            <div class="title-not-qualified">
-                element @{++x;} @x
-            </div>
-            <div class="content-not-qualified" style="display:@NotQualified" @onclick(openNotQualifiedDiv)">
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-                elementP @{++x;} @x <br />
-            </div>
-        </div>
-        <button @onclick(openNewCompaniesDiv)>Click me</button>
     </div>
+    <div class="RQ qualified" @onclick="openQualifiedDiv">
+        <div class="RTitle title-qualified">
+            Квалифицированные
+        </div>
+        <div class="RContent content-qualified" style="display:@Qualufied">
+            ATM ATM Pty Ltd <br />
+            A.C.N. 605 479 678 Pty Ltd <br />
+            24-pay s.r.o <br />
+        </div>
+    </div>
+    <div class="RQ not-qualified" @onclick="openNotQualifiedDiv">
+        <div class="RTitle title-not-qualified">
+            Не валифицированные
+        </div>
+        <div class="RContent content-not-qualified" style="display:@NotQualified">
+            elementP @{++x;} z <br />
+            elementP @{++x;} z <br />
+            elementP @{++x;} z <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+            elementP @{++x;} x <br />
+        </div>
+    </div>
+</div>
 
-@functions{
-    void openNewCompaniesDiv()
+@code{
+    private void openNewCompaniesDiv()
     {
         NewCompany = "block";
         Qualufied = "none";
         NotQualified = "none";
     }
-    void openQualifiedDiv()
+    private void openQualifiedDiv()
     {
         NewCompany = "none";
         Qualufied = "block";
         NotQualified = "none";
     }
-    void openNotQualifiedDiv()
+    private void openNotQualifiedDiv()
     {
         NewCompany = "none";
         Qualufied = "none";
