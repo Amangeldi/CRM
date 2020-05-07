@@ -8,96 +8,129 @@
 @using CRM.BLL.DTO
 @using CRM.BLL.Services
 @inject CRM.BLL.Interfaces.ICompanyService companyService
+@inject CRM.BLL.Services.SelectedItemService SelectService
 @code{
     [Parameter]
     public string NewCompany { get; set; } = "block";
     [Parameter]
-    public string Qualufied { get; set; } = "none";
+    public string Qualified { get; set; } = "none";
     [Parameter]
     public string NotQualified { get; set; } = "none";
     [Parameter]
     public string LeftStyle { get; set; } = @"'title-new-companies' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-                 'title-qualified'
-                  'title-not-qualified'";
-    public IEnumerable<CompanyDTO> companies;
+         'title-qualified'
+          'title-not-qualified'";
+    [Parameter]
+    public int SelectedId { get; set; }
+
+    public IEnumerable<CompanyDTO> NewCompanies;
+    public IEnumerable<CompanyDTO> QualifiedCompanies;
+    public IEnumerable<CompanyDTO> NotQualifiedCompanies;
     public override async Task SetParametersAsync(ParameterView parameters)
     {
-        companies = await companyService.GetCompanies();
+        NewCompanies = await companyService.GetNewCompanies();
+        QualifiedCompanies = await companyService.GetQualifiedCompanies();
+        NotQualifiedCompanies = await companyService.GetNotQualifiedCompanies();
+        SelectService.OnChange += StateHasChanged;
+        SelectedId = SelectService.GetId();
         await base.SetParametersAsync(parameters);
     }
     public int x = 0;
+
 }
 <div class="left" style="grid-template-areas:@LeftStyle">
     <div class="title title-new-companies" @onclick="openNewCompaniesDiv">
         Новые компании
     </div>
     <div class="content content-new-companies" style="display:@NewCompany">
-        @foreach (var company in companies)
+        @foreach (var company in NewCompanies)
         {
-            /*<div class="company-element" data-company-id="@company.Id">
-
-            </div>*/
-            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+            if (company.Id != SelectedId)
+            {
+                <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
+            else
+            {
+                <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
         }
     </div>
     <div class="title title-qualified" @onclick="openQualifiedDiv">
         Квалифицированные
     </div>
-    <div class="content content-qualified" style="display:@Qualufied">
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
-        ElementW @{ ++x;} @x <br />
+    <div class="content content-qualified" style="display:@Qualified">
+        @foreach (var company in QualifiedCompanies)
+        {
+            if (company.Id != SelectedId)
+            {
+                <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
+            else
+            {
+                <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
+        }
     </div>
     <div class="title title-not-qualified" @onclick="openNotQualifiedDiv">
         Не квалифицированные
     </div>
     <div class="content content-not-qualified" style="display:@NotQualified">
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
-        ELEMENT E  @{ ++x;} @x <br />
+        @foreach (var company in NotQualifiedCompanies)
+        {
+            if (company.Id != SelectedId)
+            {
+                <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
+            else
+            {
+                <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                    <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                </div>
+            }
+        }
     </div>
 </div>
 @code{
-    private void selectCompanyElement(int i)
+    private void selectCompanyElement(int id)
     {
-       //@onclick= "selectCompanyElement(company.Id)"
-}
-private void openNewCompaniesDiv()
-{
-    NewCompany = "block";
-    Qualufied = "none";
-    NotQualified = "none";
-    LeftStyle = @"'title-new-companies''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-             'title-qualified'
-              'title-not-qualified'";
-}
-private void openQualifiedDiv()
-{
-    NewCompany = "none";
-    Qualufied = "block";
-    NotQualified = "none";
-    LeftStyle = @"'title-new-companies'
-             'title-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-              'title-not-qualified'";
-}
-private void openNotQualifiedDiv()
-{
-    NewCompany = "none";
-    Qualufied = "none";
-    NotQualified = "block";
-    LeftStyle = @"'title-new-companies'
-             'title-qualified'
-              'title-not-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'";
-}
+        SelectService.SetId(id);
+        SelectedId = id;
+    }
+    private void openNewCompaniesDiv()
+    {
+        NewCompany = "block";
+        Qualified = "none";
+        NotQualified = "none";
+        LeftStyle = @"'title-new-companies''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
+     'title-qualified'
+      'title-not-qualified'";
+    }
+    private void openQualifiedDiv()
+    {
+        NewCompany = "none";
+        Qualified = "block";
+        NotQualified = "none";
+        LeftStyle = @"'title-new-companies'
+     'title-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
+      'title-not-qualified'";
+    }
+    private void openNotQualifiedDiv()
+    {
+        NewCompany = "none";
+        Qualified = "none";
+        NotQualified = "block";
+        LeftStyle = @"'title-new-companies'
+     'title-qualified'
+      'title-not-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'";
+    }
 }

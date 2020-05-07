@@ -1,12 +1,33 @@
-﻿<div class="controls">
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using CRM.BLL.DTO
+@using CRM.BLL.Services
+@inject CRM.BLL.Interfaces.ICompanyService companyService
+@inject CRM.BLL.Services.SelectedItemService SelectService
+<div class="controls">
     <div class="flex-center not-q-div">
-        <button>Квалификацию не прошёл</button>
+        <button @onclick="setNotQualify">Квалификацию не прошёл</button>
     </div>
     <div class="flex-center q-div">
-        <button>Квалифицировать как клиента</button>
+        <button @onclick="setQualify">Квалифицировать как клиента</button>
     </div>
 </div>
 
 @code {
-
+    private void setQualify()
+    {
+        companyService.SetQualified(SelectService.GetId());
+        SelectService.NotifyStateChanged();
+    }
+    private void setNotQualify()
+    {
+        companyService.SetNotQualified(SelectService.GetId());
+        SelectService.NotifyStateChanged();
+        
+    }
 }

@@ -102,7 +102,7 @@ namespace CRM.BLL.Services
             IEnumerable<CompanyDTO> countryLangDTOs = GetMapper().Map<IEnumerable<Company>, IEnumerable<CompanyDTO>>(companies);
             return countryLangDTOs;
         }
-
+        
         public async Task<CompanyDTO> GetCompany(int CompanyId)
         {
             Company company = await db.Companies.FindAsync(CompanyId);
@@ -113,6 +113,27 @@ namespace CRM.BLL.Services
         {
             IEnumerable<CompanyDTO> companies = await GetCompanies();
             return companies.Where(p => p.HGBasedInCountryId == CountryId);
+        }
+
+        public async Task<IEnumerable<CompanyDTO>> GetNewCompanies()
+        {
+            CompanyQualification companyQualification = await db.CompanyQualifications.Where(p => p.QualificationName == "NewCompany").FirstOrDefaultAsync();
+            IEnumerable<CompanyDTO> NewCompanies = await GetCompanies();
+            return NewCompanies.Where(p => p.QualificationId == companyQualification.Id);
+        }
+
+        public async Task<IEnumerable<CompanyDTO>> GetNotQualifiedCompanies()
+        {
+            CompanyQualification companyQualification = await db.CompanyQualifications.Where(p => p.QualificationName == "NotQualified").FirstOrDefaultAsync();
+            IEnumerable<CompanyDTO> NotQualifiedCompanies = await GetCompanies();
+            return NotQualifiedCompanies.Where(p => p.QualificationId == companyQualification.Id);
+        }
+
+        public async Task<IEnumerable<CompanyDTO>> GetQualifiedCompanies()
+        {
+            CompanyQualification companyQualification = await db.CompanyQualifications.Where(p=>p.QualificationName== "Qualified").FirstOrDefaultAsync();
+            IEnumerable<CompanyDTO> QualifiedCompanies = await GetCompanies();
+            return QualifiedCompanies.Where(p=>p.QualificationId==companyQualification.Id);
         }
 
         public async Task<IEnumerable<CompanyDTO>> GetRegionCompanies(int RegionId)
@@ -155,6 +176,37 @@ namespace CRM.BLL.Services
             await db.SaveChangesAsync();
             return await GetCompany(company.Id);
         }
+
+        public async Task<bool> SetNotQualified(int CompanyId)
+        {
+            CompanyQualification companyQualification = await db.CompanyQualifications.Where(p => p.QualificationName == "NotQualified").FirstOrDefaultAsync();
+            QualifyCompanyDTO qualifyCompanyDTO = new QualifyCompanyDTO { CompanyId = CompanyId, CompanyQualificationId = companyQualification.Id };
+            try
+            {
+                await QualifyCompany(qualifyCompanyDTO);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> SetQualified(int CompanyId)
+        {
+            CompanyQualification companyQualification = await db.CompanyQualifications.Where(p => p.QualificationName == "Qualified").FirstOrDefaultAsync();
+            QualifyCompanyDTO qualifyCompanyDTO = new QualifyCompanyDTO { CompanyId = CompanyId, CompanyQualificationId = companyQualification.Id };
+            try
+            {
+                await QualifyCompany(qualifyCompanyDTO);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         private IMapper GetMapper()
         {
             return new MapperConfiguration(cfg => cfg.CreateMap<Company, CompanyDTO>()).CreateMapper();
