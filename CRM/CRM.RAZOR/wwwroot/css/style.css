@@ -1,21 +1,27 @@
-﻿*{
-    color:white;
+﻿* {
     font-size: 20px;
+}
 
+.title {
+    font-size: 23px;
 }
-.title{
-    color:black;
-    font-size:23px;
+
+div {
+    border: 1px solid #f0f0f1;
+    background: #abce85;
 }
-a{
-    color:white;
+
+a {
+    color: darkgreen;
 }
-a:visited{
-    color:yellow;
-}
+
+    a:visited {
+        color: yellow;
+    }
+
 header {
     min-height: 100px;
-    background-color: red;
+    background: #f3f3f3;
 }
 
 .container {
@@ -23,14 +29,18 @@ header {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas: "a b b b c";
 }
+
 .left {
     grid-area: a;
     min-height: 230px;
     height: calc(100vh - 110px);
-    background-color: #8bcfea;
     display: grid;
     /*grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;*/
 }
+
+    .left > div {
+        padding:5px;
+    }
 
 .title-new-companies {
     grid-area: title-new-companies;
@@ -43,9 +53,11 @@ header {
 .content-new-companies {
     grid-area: content;
 }
-.content{
-    background:#0926d7;
+
+.content {
+    color: #484848;
 }
+
 .content-qualified {
     grid-area: content;
 }
@@ -62,12 +74,51 @@ header {
     grid-area: b;
     min-height: 230px;
     height: calc(100vh - 110px);
-    background-color: royalblue;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 1px 1px;
+    grid-template-areas: "company-information" "company-information" "company-information" "controls" "prospect-finder" "prospect-finder" "prospect-finder" "prospect-finder";
 }
 
 .right {
     grid-area: c;
     min-height: 230px;
     height: calc(100vh - 110px);
-    background-color: saddlebrown;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px 1px;
+    grid-template-areas: "user" "logs";
+}
+
+.company-information {
+    grid-area: company-information;
+}
+
+.controls {
+    grid-area: controls;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1px 1px;
+    grid-template-areas: "not-q-div q-div";
+}
+
+.prospect-finder {
+    grid-area: prospect-finder;
+}
+
+.user {
+    grid-area: user;
+}
+
+.logs {
+    grid-area: logs;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

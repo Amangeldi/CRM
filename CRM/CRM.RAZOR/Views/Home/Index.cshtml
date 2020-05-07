@@ -15,10 +15,13 @@
     <div class="container">
         <component type="typeof(CompaniesDiv)" render-mode="Server" />
         <div class="center">
-
+            <component type="typeof(CompanyInformationDiv)" render-mode="Server" />
+            <component type="typeof(Controls)" render-mode="Server" />
+            <component type="typeof(ProspectFinderDiv)" render-mode="Server" />
         </div>
         <div class="right">
-
+            <div class="user"></div>
+            <component type="typeof(Logs)" render-mode="Server" />
         </div>
     </div>
     <script src="_framework/blazor.server.js"></script>
