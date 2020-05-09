@@ -7,10 +7,7 @@ namespace CRM.BLL.Services
 {
     public class SelectedItemService : ISelectedItemService
     {
-        private int Id { get; set; }
-
-        public event Action OnChange;
-
+        public int Id { get; set; }
         public void SetId (int Id)
         {
             this.Id = Id;
@@ -18,11 +15,6 @@ namespace CRM.BLL.Services
         public int GetId()
         {
             return Id;
-        }
-
-        public void NotifyStateChanged()
-        {
-            OnChange?.Invoke();
         }
     }
 }

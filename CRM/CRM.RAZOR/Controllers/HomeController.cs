@@ -12,12 +12,9 @@ namespace CRM.RAZOR.Controllers
 {
     public class HomeController : Controller
     {
-        ICompanyService companyServ;
-        public HomeController(ICompanyService companyService)
+        public HomeController()
         {
-            companyServ = companyService;
         }
-
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Титуль";
@@ -27,6 +24,5 @@ namespace CRM.RAZOR.Controllers
             //ViewData["companies"] = await companyServ.GetCompanies();
             return View();
         }
-
     }
 }

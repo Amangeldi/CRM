@@ -7,6 +7,8 @@
 @using Microsoft.JSInterop
 @using CRM.BLL.DTO
 @using CRM.BLL.Services
+@using System.Threading;
+@implements IDisposable
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
 @code{
@@ -18,8 +20,8 @@
     public string NotQualified { get; set; } = "none";
     [Parameter]
     public string LeftStyle { get; set; } = @"'title-new-companies' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-         'title-qualified'
-          'title-not-qualified'";
+'title-qualified'
+'title-not-qualified'";
     [Parameter]
     public int SelectedId { get; set; }
 
@@ -28,15 +30,29 @@
     public IEnumerable<CompanyDTO> NotQualifiedCompanies;
     public override async Task SetParametersAsync(ParameterView parameters)
     {
+        await RenderUpdate();
+        StartCountdown();
+        await base.SetParametersAsync(parameters);
+    }
+    public async Task RenderUpdate()
+    {
         NewCompanies = await companyService.GetNewCompanies();
         QualifiedCompanies = await companyService.GetQualifiedCompanies();
         NotQualifiedCompanies = await companyService.GetNotQualifiedCompanies();
-        SelectService.OnChange += StateHasChanged;
         SelectedId = SelectService.GetId();
-        await base.SetParametersAsync(parameters);
+    }
+    void StartCountdown()
+    {
+        var timer = new Timer(new TimerCallback(async _=>
+        {
+            await RenderUpdate();
+            await InvokeAsync(StateHasChanged);
+        }),null, 5000,3000);
     }
     public int x = 0;
-
+    public void Dispose()
+    {
+    }
 }
 <div class="left" style="grid-template-areas:@LeftStyle">
     <div class="title title-new-companies" @onclick="openNewCompaniesDiv">
@@ -112,8 +128,8 @@
         Qualified = "none";
         NotQualified = "none";
         LeftStyle = @"'title-new-companies''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-     'title-qualified'
-      'title-not-qualified'";
+'title-qualified'
+'title-not-qualified'";
     }
     private void openQualifiedDiv()
     {
@@ -121,8 +137,8 @@
         Qualified = "block";
         NotQualified = "none";
         LeftStyle = @"'title-new-companies'
-     'title-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
-      'title-not-qualified'";
+'title-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'
+'title-not-qualified'";
     }
     private void openNotQualifiedDiv()
     {
@@ -130,7 +146,7 @@
         Qualified = "none";
         NotQualified = "block";
         LeftStyle = @"'title-new-companies'
-     'title-qualified'
-      'title-not-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'";
+'title-qualified'
+'title-not-qualified''content' 'content' 'content' 'content' 'content' 'content' 'content' 'content' 'content'";
     }
 }

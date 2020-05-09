@@ -16,9 +16,9 @@ namespace CRM.BLL.Services
     public class CompanyService : ICompanyService
     {
         readonly ApiContext db;
-        IQualificationService qualificationServ;
-        ICountryService countryServ;
-        UserManager<User> _userManager;
+        readonly IQualificationService qualificationServ;
+        readonly ICountryService countryServ;
+        readonly UserManager<User> _userManager;
         public CompanyService(ApiContext context, IQualificationService qualificationService, ICountryService countryService, UserManager<User> userManager)
         {
             db = context;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CRM.BLL.Interfaces
 {
@@ -8,7 +9,5 @@ namespace CRM.BLL.Interfaces
     {
         void SetId(int Id);
         int GetId();
-        void NotifyStateChanged();
-        event Action OnChange;
     }
 }

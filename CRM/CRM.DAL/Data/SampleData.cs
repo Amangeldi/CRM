@@ -44,7 +44,9 @@ namespace CRM.DAL.Data
                 Country Australia = new Country { Capital = "Canberra", Name = "Australia", Region = AsiaPacific };
                 Country Germany = new Country { Capital = "Berlin", Name = "Germany", Region = Europe };
                 Country Slovakia = new Country { Capital = "Bratislava", Name = "Slovakia", Region = Europe };
-                await context.Countries.AddRangeAsync(Australia, Germany, Slovakia);
+                Country USA = new Country { Capital = "Washington", Name = "Unated States", Region = NorthAmerica };
+                Country TM = new Country { Capital = "Ashgabat", Name = "Turkmenistan", Region = AsiaPacific };
+                await context.Countries.AddRangeAsync(Australia, Germany, Slovakia, USA);
                 CompanyQualification Qualified = new CompanyQualification { QualificationName = "Qualified" };
                 CompanyQualification NotQualified = new CompanyQualification { QualificationName = "NotQualified" };
                 CompanyQualification NewCompany = new CompanyQualification { QualificationName = "NewCompany" };
@@ -76,7 +78,39 @@ namespace CRM.DAL.Data
                     LeadOwner = lead,
                     Website = "24-pay.sk"
                 };
-                await context.Companies.AddRangeAsync(ACN, ATM, Pay);
+                Company Ttz = new Company
+                {
+                    CompanyLegalName = "HO ''Turkmen-Tranzit''",
+                    HGBasedInCountry = TM,
+                    Qualification = NewCompany,
+                    TradingName = "Turkmen-Tranzit",
+                    Website = "Turkmen-Tranzit.com"
+                };
+                Company Ttw = new Company
+                {
+                    CompanyLegalName = "HO ''Turkmen-Tranzit'' -> TTWeb",
+                    HGBasedInCountry = TM,
+                    Qualification = NewCompany,
+                    TradingName = "TtWeb",
+                    Website = "Ttweb.org"
+                };
+                Company google = new Company
+                {
+                    CompanyLegalName = "google",
+                    HGBasedInCountry = USA,
+                    Qualification = NewCompany,
+                    TradingName = "google",
+                    Website = "google.com"
+                };
+                Company microsoft = new Company
+                {
+                    CompanyLegalName = "microsoft",
+                    HGBasedInCountry = USA,
+                    Qualification = NewCompany,
+                    TradingName = "microsoft",
+                    Website = "microsoft.com"
+                };
+                await context.Companies.AddRangeAsync(ACN, ATM, Pay, Ttz, Ttw, google, microsoft);
 
                 await context.SaveChangesAsync();
             }

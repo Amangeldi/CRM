@@ -22,12 +22,12 @@
     private void setQualify()
     {
         companyService.SetQualified(SelectService.GetId());
-        SelectService.NotifyStateChanged();
+        SelectService.SetId(0);
     }
     private void setNotQualify()
     {
         companyService.SetNotQualified(SelectService.GetId());
-        SelectService.NotifyStateChanged();
+        SelectService.SetId(0);
         
     }
 }
