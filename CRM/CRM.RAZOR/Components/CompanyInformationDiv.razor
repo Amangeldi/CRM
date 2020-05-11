@@ -1,7 +1,138 @@
-﻿<div class="company-information">
+﻿@using System.Net.Http
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using CRM.BLL.DTO;
+@using CRM.BLL.Services;
+@using System.Threading;
+@using CRM.RAZOR.Models;
+@implements IDisposable
+@inject CRM.BLL.Services.SelectedItemService SelectService
+@inject CRM.BLL.Interfaces.ICountryService countryService
+@inject CRM.BLL.Interfaces.ICompanyService companyService
+@inject CRM.BLL.Interfaces.IUserRegistrationService userService
+@inject CRM.BLL.Interfaces.IQualificationService qualificationService
+@inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
+
+<div class="company-information">
     Информация о компании
+    @if (CompanyModel != null)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="7">
+                        @CompanyModel.CompanyLegalName
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Id
+                    </td>
+                    <td>
+                        Trading Name
+                    </td>
+                    <td>
+                        WebSite
+                    </td>
+                    <td>
+                        HQ Based in country
+                    </td>
+                    <td>
+                        LeadOwner
+                    </td>
+                    <td>
+                        Qualification
+                    </td>
+                    <td>
+                        Qualificated Date
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @CompanyModel.Id
+                    </td>
+                    <td>
+                        @CompanyModel.TradingName
+                    </td>
+                    <td>
+                        @CompanyModel.Website
+                    </td>
+                    <td>
+                        @CompanyModel.HGBasedInCountryName
+                    </td>
+                    <td>
+                        @CompanyModel.LeadOwnerFullName
+                    </td>
+                    <td>
+                        @CompanyModel.QualificationName
+                    </td>
+                    <td>
+                        @CompanyModel.QualifiedDate.ToShortDateString();
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
 </div>
 
 @code {
+    Timer timer;
+    private CancellationTokenSource _cts = new CancellationTokenSource();
+    public int SelectedId;
+    public CompanyModel CompanyModel;
 
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await SelectService.UpdateCompanies();
+        await CompanyMap.UpdateCompanies();
+        await RenderUpdate();
+        StartCountdown();
+        await base.SetParametersAsync(parameters);
+    }
+    void StartCountdown()
+    {
+        timer = new Timer(new TimerCallback(async _ =>
+        {
+            try
+            {
+                await RenderUpdate();
+            }
+            catch
+            {
+                _cts.Cancel();
+                timer.Dispose();
+            }
+            await InvokeAsync(StateHasChanged);
+        }), null, 2300, 900);
+    }
+    public async Task RenderUpdate()
+    {
+        SelectedId = SelectService.GetId();
+        if (SelectedId != 0)
+        {
+            CompanyModel = CompanyMap.companyModels.Where(p => p.Id == SelectedId).FirstOrDefault();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        else
+        {
+            CompanyModel = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (timer != null)
+        {
+            timer.Dispose();
+        }
+        _cts.Cancel();
+    }
 }

@@ -122,3 +122,27 @@ header {
     justify-content: center;
     align-items: center;
 }
+table {
+    border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+    border: 3px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 3px*/
+    color: #669;
+    padding: 9px 8px;
+    background: white;
+    width:100%;
+    text-align:center;
+}
+tbody tr:hover td {
+    color: #6699ff;
+}
+tbody tr:nth-child(odd) {
+    background-color: #e6e6e6;
+}
+th {
+    border: 1px solid grey;
+}
+td {
+    border: 1px solid grey;
+}
+th, td {
+    border: 1px solid grey;
+}

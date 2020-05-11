@@ -6,15 +6,16 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
-@inject CRM.BLL.Services.SelectedItemService SelectService
+@inject CRM.BLL.Services.TempService TempService
 
 
 
 <div class="flex-center user">
-    @if (SelectService.CurrentUser != null)
+    @if (TempService.CurrentUser != null)
     {
-        @SelectService.CurrentUser.Email
+        @TempService.CurrentUser.Email <br />
         <a href="account/logout">Выйти</a>
+        
     }
     else
     {

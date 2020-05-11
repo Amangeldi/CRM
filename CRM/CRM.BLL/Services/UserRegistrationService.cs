@@ -86,6 +86,10 @@ namespace CRM.BLL.Services
 
         public async Task<string> GetUserFullName(string userId)
         {
+            if(userId==null)
+            {
+                return "Lead не назначен";
+            }
             GetUserDTO user = await GetUser(userId);
             return user.FirstName + " " + user.LastName;
         }

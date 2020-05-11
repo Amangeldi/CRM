@@ -6,6 +6,7 @@ using CRM.BLL.Interfaces;
 using CRM.BLL.Services;
 using CRM.DAL.EF;
 using CRM.DAL.Entities;
+using CRM.RAZOR.Mappings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,14 +48,17 @@ namespace CRM.RAZOR
             services.AddTransient(typeof(ICountryService), typeof(CountryService));
             services.AddTransient(typeof(IQualificationService), typeof(QualificationService));
             services.AddTransient(typeof(ICompanyService), typeof(CompanyService));
-            services.AddSingleton<SelectedItemService>();
+            services.AddScoped<SelectedItemService>();
+            services.AddTransient<CompanyMap>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddSignalR();
+            services.AddSingleton<TempService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

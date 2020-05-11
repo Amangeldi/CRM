@@ -10,6 +10,7 @@
 @using System.Threading;
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
+@inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
 <div class="controls">
     <div class="flex-center not-q-div">
         <button id="i1" @onclick="setNotQualify" disabled="@IsDisabled">Квалификацию не прошёл</button>
@@ -24,6 +25,8 @@
     private async void setQualify()
     {
         await companyService.SetQualified(SelectService.GetId());
+        await SelectService.UpdateCompanies();
+        await CompanyMap.UpdateCompanies();
         SelectService.SetId(0);
         pause();
 
@@ -31,6 +34,8 @@
     private async void setNotQualify()
     {
         await companyService.SetNotQualified(SelectService.GetId());
+        await SelectService.UpdateCompanies();
+        await CompanyMap.UpdateCompanies();
         SelectService.SetId(0);
         pause();
     }
@@ -38,7 +43,7 @@
     {
         IsDisabled = true;
         await InvokeAsync(StateHasChanged);
-        Thread.Sleep(2300);
+        Thread.Sleep(1200);
         IsDisabled = false;
         await InvokeAsync(StateHasChanged);
     }

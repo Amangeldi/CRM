@@ -67,15 +67,24 @@ namespace CRM.BLL.Services
 
         public async Task<CountryDTO> GetCountry(int CountryId)
         {
-            Country country = await db.Countries.FindAsync(CountryId);
-            CountryDTO countryDTO = new CountryDTO 
-            { 
-                Capital = country.Capital,
-                Id = CountryId,
-                Name = country.Name,
-                RegionId = country.RegionId
-            };
-            return countryDTO;
+            try
+            {
+
+                Country country = await db.Countries.FindAsync(CountryId);
+
+                CountryDTO countryDTO = new CountryDTO
+                {
+                    Capital = country.Capital,
+                    Id = CountryId,
+                    Name = country.Name,
+                    RegionId = country.RegionId
+                };
+                return countryDTO;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<CountryDTO>> GetRegionCountries(int RegionId)

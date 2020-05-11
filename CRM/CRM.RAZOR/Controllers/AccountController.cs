@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CRM.BLL.Interfaces;
 using CRM.BLL.Services;
 using CRM.DAL.Entities;
 using CRM.RAZOR.Models;
@@ -16,11 +17,15 @@ namespace CRM.RAZOR.Controllers
     public class AccountController : Controller
     {
         readonly UserManager<User> _userManager;
-        readonly SelectedItemService _selectedItemService;
-        public AccountController(UserManager<User> userManager, SelectedItemService selectedItemService)
+        readonly TempService _tempService;
+        SignInManager<User> _signInManager;
+        IUserRegistrationService _userRegistrationService;
+        public AccountController(UserManager<User> userManager, TempService tempService, SignInManager<User> signInManager, IUserRegistrationService userRegistrationService)
         {
             _userManager = userManager;
-            _selectedItemService = selectedItemService;
+            _signInManager = signInManager;
+            _tempService = tempService;
+            _userRegistrationService = userRegistrationService;
         }
         [HttpGet("/Login")]
         public IActionResult Login()
@@ -32,33 +37,26 @@ namespace CRM.RAZOR.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                var result =
+             await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+                if (result.Succeeded)
                 {
-                    await Authenticate(model.Email); // аутентификация
-                    _selectedItemService.CurrentUser = user;
+                    _tempService.CurrentUser = await _userRegistrationService.GetCurrent(model.Email);
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
             }
             return View(model);
-        }
-        private async Task Authenticate(string userName)
-        {
-            // создаем один claim
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
         
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _signInManager.SignOutAsync();
+            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            _tempService.CurrentUser = null;
             return RedirectToAction("index", "home");
         }
     }
