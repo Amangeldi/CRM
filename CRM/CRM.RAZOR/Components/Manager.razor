@@ -1,0 +1,27 @@
+﻿@using System.Net.Http
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject CRM.BLL.Services.SelectedItemService SelectService
+
+
+
+<div class="flex-center user">
+    @if (SelectService.CurrentUser != null)
+    {
+        @SelectService.CurrentUser.Email
+        <a href="account/logout">Выйти</a>
+    }
+    else
+    {
+        <h1>Проблемы с авторизацией</h1>
+    }
+</div>
+
+@code {
+
+}

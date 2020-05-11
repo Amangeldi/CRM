@@ -6,6 +6,7 @@ using CRM.BLL.Interfaces;
 using CRM.BLL.Services;
 using CRM.DAL.EF;
 using CRM.DAL.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -47,6 +48,8 @@ namespace CRM.RAZOR
             services.AddTransient(typeof(IQualificationService), typeof(QualificationService));
             services.AddTransient(typeof(ICompanyService), typeof(CompanyService));
             services.AddSingleton<SelectedItemService>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +70,7 @@ namespace CRM.RAZOR
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

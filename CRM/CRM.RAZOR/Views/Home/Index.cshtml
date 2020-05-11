@@ -20,7 +20,20 @@
             <component type="typeof(ProspectFinderDiv)" render-mode="Server" />
         </div>
         <div class="right">
-            <div class="user"></div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <component type="typeof(Manager)" render-mode="Server" />
+            }
+            else
+            {
+                <form name="f1" asp-controller="Account" asp-action="Login" method="post">
+                    <p>Введите login </p>
+                    <input type="text" name="Email" />
+                    <p>Введите пароль </p>
+                    <input name="Password" />
+                    <input type="submit" value="Войти" class="btn btn-outline-dark" />
+                </form>
+            }
             <component type="typeof(Logs)" render-mode="Server" />
         </div>
     </div>

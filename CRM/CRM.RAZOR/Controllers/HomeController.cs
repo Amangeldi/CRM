@@ -15,6 +15,7 @@ namespace CRM.RAZOR.Controllers
         public HomeController()
         {
         }
+        
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Титуль";

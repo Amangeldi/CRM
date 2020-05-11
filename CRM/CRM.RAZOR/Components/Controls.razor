@@ -7,27 +7,39 @@
 @using Microsoft.JSInterop
 @using CRM.BLL.DTO
 @using CRM.BLL.Services
+@using System.Threading;
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
 <div class="controls">
     <div class="flex-center not-q-div">
-        <button @onclick="setNotQualify">Квалификацию не прошёл</button>
+        <button id="i1" @onclick="setNotQualify" disabled="@IsDisabled">Квалификацию не прошёл</button>
     </div>
     <div class="flex-center q-div">
-        <button @onclick="setQualify">Квалифицировать как клиента</button>
+        <button @onclick="setQualify" disabled="@IsDisabled">Квалифицировать как клиента</button>
     </div>
 </div>
 
 @code {
-    private void setQualify()
+    public bool IsDisabled { get; set; }
+    private async void setQualify()
     {
-        companyService.SetQualified(SelectService.GetId());
+        await companyService.SetQualified(SelectService.GetId());
         SelectService.SetId(0);
+        pause();
+
     }
-    private void setNotQualify()
+    private async void setNotQualify()
     {
-        companyService.SetNotQualified(SelectService.GetId());
+        await companyService.SetNotQualified(SelectService.GetId());
         SelectService.SetId(0);
-        
+        pause();
+    }
+    async void pause()
+    {
+        IsDisabled = true;
+        await InvokeAsync(StateHasChanged);
+        Thread.Sleep(2300);
+        IsDisabled = false;
+        await InvokeAsync(StateHasChanged);
     }
 }

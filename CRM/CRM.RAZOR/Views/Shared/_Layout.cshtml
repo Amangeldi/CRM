@@ -9,38 +9,6 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body>
-    <header>
-        <div class="inner-header">
-            @ViewData["header"]
-        </div>
-    </header>
-    <div class="container row">
-        <div class="sidebar sidebar-1">
-            <div class=" inner-sidebar-1">
-                @ViewData["sidebar"]
-                <applet></applet>
-                <component type="typeof(CompaniesDiv)" render-mode="ServerPrerendered" />
-            </div>
-        </div>
-        <div class="content">
-            <div class="inner-content">
-                @RenderBody()
-            </div>
-        </div>
-        <div class="sidebar sidebar-2">
-            <div class=" inner-sidebar-2">
-                @ViewData["sidebar"]
-            </div>
-            <div class=" inner-sidebar-22">
-                @ViewData["sidebar"]
-            </div>
-        </div>
-    </div>
-    <footer>
-        <div class="inner-footer">
-            @ViewData["footer"]
-        </div>
-    </footer>
     <script src="_framework/blazor.server.js"></script>
 </body>
 </html>

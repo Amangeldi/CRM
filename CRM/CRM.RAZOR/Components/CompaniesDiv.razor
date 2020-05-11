@@ -1,4 +1,5 @@
 ﻿@using System.Net.Http
+@using System.Security.Claims
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
@@ -9,9 +10,12 @@
 @using CRM.BLL.Services
 @using System.Threading;
 @implements IDisposable
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
 @code{
+    Timer timer;
+    private CancellationTokenSource _cts = new CancellationTokenSource();
     [Parameter]
     public string NewCompany { get; set; } = "block";
     [Parameter]
@@ -43,15 +47,25 @@
     }
     void StartCountdown()
     {
-        var timer = new Timer(new TimerCallback(async _=>
+        timer = new Timer(new TimerCallback(async _ =>
         {
-            await RenderUpdate();
+            try
+            {
+                await RenderUpdate();
+            }
+            catch
+            {
+                _cts.Cancel();
+                timer.Dispose();
+            }
             await InvokeAsync(StateHasChanged);
-        }),null, 5000,3000);
+        }), null, 5000, 3000);
     }
     public int x = 0;
     public void Dispose()
     {
+        timer.Dispose();
+        _cts.Cancel();
     }
 }
 <div class="left" style="grid-template-areas:@LeftStyle">
@@ -117,6 +131,7 @@
     </div>
 </div>
 @code{
+
     private void selectCompanyElement(int id)
     {
         SelectService.SetId(id);
