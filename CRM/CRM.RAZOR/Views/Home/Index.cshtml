@@ -1,5 +1,8 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using CRM.RAZOR.Components
+@inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Interfaces.IUserRegistrationService UserRegistrationService
+
 @{ Layout = null;}
 <!DOCTYPE html>
 <html>
@@ -22,6 +25,7 @@
         <div class="right">
             @if (User.Identity.IsAuthenticated)
             {
+                TempService.CurrentUser = await UserRegistrationService.GetCurrent(User.Identity.Name);
                 <component type="typeof(Manager)" render-mode="Server" />
             }
             else

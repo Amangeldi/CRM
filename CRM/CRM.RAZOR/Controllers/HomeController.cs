@@ -9,6 +9,7 @@ using CRM.RAZOR.Models;
 using CRM.BLL.Interfaces;
 using CRM.DAL.Entities;
 using CRM.BLL.Services;
+using System.IO;
 
 namespace CRM.RAZOR.Controllers
 {
@@ -21,10 +22,10 @@ namespace CRM.RAZOR.Controllers
             tempServ = tempService;
             userRegistrationServ = userRegistrationService;
         }
-        
+
         public async Task<IActionResult> Index()
         {
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
                 tempServ.CurrentUser = await userRegistrationServ.GetCurrent(User.Identity.Name);
             }

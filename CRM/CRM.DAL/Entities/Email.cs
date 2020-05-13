@@ -10,7 +10,7 @@ namespace CRM.DAL.Entities
         public string LeadOwnerSenderId { get; set; }
         public User LeadOwnerSender { get; set; }
         public string ClientAddresseeId { get; set; }
-        public User ClientAddressee { get; set; }
+        public Contact ClientAddressee { get; set; }
         public bool IsSended { get; set; }
         public int MessageId { get; set; }
         public MailMessage Message { get; set; }

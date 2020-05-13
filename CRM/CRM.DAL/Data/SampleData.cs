@@ -51,6 +51,27 @@ namespace CRM.DAL.Data
                 CompanyQualification NotQualified = new CompanyQualification { QualificationName = "NotQualified" };
                 CompanyQualification NewCompany = new CompanyQualification { QualificationName = "NewCompany" };
                 await context.CompanyQualifications.AddRangeAsync(Qualified, NotQualified, NewCompany);
+
+                Contact contact1 = new Contact { Email = "aojv@mail.ru" };
+                Contact contact2 = new Contact { Email = "kggfpxw@yandex.ru" };
+                Contact contact3 = new Contact { Email = "oxxv@yandex.ru" };
+                Contact contact4 = new Contact { Email = "f9jxjd14@gmail.com" };
+                Contact contact5 = new Contact { Email = "p24a@mail.ru" };
+                Contact contact6 = new Contact { Email = "ahbg@yandex.ru" };
+                Contact contact7 = new Contact { Email = "xl9bc5@gmail.com" };
+                Contact contact8 = new Contact { Email = "q4aptu@mail.ru" };
+                Contact contact9 = new Contact { Email = "n4zc9kz@yandex.ru" };
+                Contact contact10 = new Contact { Email = "copaa6@gmail.com" };
+                Contact contact11 = new Contact { Email = "myrfqpb@mail.ru" };
+                Contact contact12 = new Contact { Email = "kc29hc0e@yandex.ru" };
+                Contact TtrContact1 = new Contact { Email = "info@turkmen-tranzit.com" };
+                Contact TtrContact2 = new Contact { Email = "help@turkmen-tranzit.com" };
+                Contact TtrContact3 = new Contact { Email = "support@turkmen-tranzit.com" };
+                Contact TtwebContact1 = new Contact { Email = "info@ttweb.org" };
+                Contact TtwebContact2 = new Contact { Email = "help@ttweb.org" };
+                Contact TtwebContact3 = new Contact { Email = "support@ttweb.org" };
+
+                await context.Contacts.AddRangeAsync(contact1, contact2, contact3, contact4, contact5, contact6, contact7, contact8, contact9, contact10, contact11, contact12, TtrContact1, TtrContact2, TtrContact3, TtwebContact1, TtwebContact2, TtwebContact3);
                 Company ACN = new Company 
                 { 
                     CompanyLegalName = "ATM ATM Pty Ltd", 
@@ -59,6 +80,22 @@ namespace CRM.DAL.Data
                     TradingName = "A.C.N." ,
                     Website = "turkmen-tranzit.com"
                 };
+                CompanyContactLink ContactACN1 = new CompanyContactLink
+                {
+                    Company = ACN,
+                    Contact = contact1
+                };
+                CompanyContactLink ContactACN2 = new CompanyContactLink
+                {
+                    Company = ACN,
+                    Contact = contact2
+                };
+                CompanyContactLink ContactACN3 = new CompanyContactLink
+                {
+                    Company = ACN,
+                    Contact = contact3
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactACN1, ContactACN2, ContactACN3);
                 Company ATM = new Company
                 {
                     CompanyLegalName = "A.C.N. 605 479 678 Pty Ltd",
@@ -69,6 +106,22 @@ namespace CRM.DAL.Data
                     QualifiedDate = DateTime.Now,
                     Website = "ttweb.org"
                 };
+                CompanyContactLink ContactATM1 = new CompanyContactLink
+                {
+                    Company = ATM,
+                    Contact = contact4
+                };
+                CompanyContactLink ContactATM2 = new CompanyContactLink
+                {
+                    Company = ATM,
+                    Contact = contact5
+                };
+                CompanyContactLink ContactATM3 = new CompanyContactLink
+                {
+                    Company = ATM,
+                    Contact = contact6
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactATM1, ContactATM2, ContactATM3);
                 Company Pay = new Company
                 {
                     CompanyLegalName = "24-pay s.r.o",
@@ -78,6 +131,22 @@ namespace CRM.DAL.Data
                     LeadOwner = lead,
                     Website = "24-pay.sk"
                 };
+                CompanyContactLink ContactPay1 = new CompanyContactLink
+                {
+                    Company = Pay,
+                    Contact = contact7
+                };
+                CompanyContactLink ContactPay2 = new CompanyContactLink
+                {
+                    Company = Pay,
+                    Contact = contact8
+                };
+                CompanyContactLink ContactPay3 = new CompanyContactLink
+                {
+                    Company = Pay,
+                    Contact = contact9
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactPay1, ContactPay2, ContactPay3);
                 Company Ttz = new Company
                 {
                     CompanyLegalName = "HO ''Turkmen-Tranzit''",
@@ -86,6 +155,22 @@ namespace CRM.DAL.Data
                     TradingName = "Turkmen-Tranzit",
                     Website = "Turkmen-Tranzit.com"
                 };
+                CompanyContactLink ContactTtz1 = new CompanyContactLink
+                {
+                    Company = Ttz,
+                    Contact = TtrContact1
+                };
+                CompanyContactLink ContactTtz2 = new CompanyContactLink
+                {
+                    Company = Ttz,
+                    Contact = TtrContact2
+                };
+                CompanyContactLink ContactTtz3 = new CompanyContactLink
+                {
+                    Company = Ttz,
+                    Contact = TtrContact3
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactTtz1, ContactTtz2, ContactTtz3);
                 Company Ttw = new Company
                 {
                     CompanyLegalName = "HO ''Turkmen-Tranzit'' -> TTWeb",
@@ -94,6 +179,22 @@ namespace CRM.DAL.Data
                     TradingName = "TtWeb",
                     Website = "Ttweb.org"
                 };
+                CompanyContactLink ContactTtw1 = new CompanyContactLink
+                {
+                    Company = Ttw,
+                    Contact = TtwebContact1
+                };
+                CompanyContactLink ContactTtw2 = new CompanyContactLink
+                {
+                    Company = Ttw,
+                    Contact = TtwebContact2
+                };
+                CompanyContactLink ContactTtw3 = new CompanyContactLink
+                {
+                    Company = Ttw,
+                    Contact = TtwebContact3
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactTtw1, ContactTtw2, ContactTtw3);
                 Company google = new Company
                 {
                     CompanyLegalName = "google",
@@ -102,6 +203,22 @@ namespace CRM.DAL.Data
                     TradingName = "google",
                     Website = "google.com"
                 };
+                CompanyContactLink ContactGoogle1 = new CompanyContactLink
+                {
+                    Company = google,
+                    Contact = contact10
+                };
+                CompanyContactLink ContactGoogle2 = new CompanyContactLink
+                {
+                    Company = google,
+                    Contact = contact11
+                };
+                CompanyContactLink ContactGoogle3 = new CompanyContactLink
+                {
+                    Company = google,
+                    Contact = contact12
+                };
+                await context.CompanyContactLinks.AddRangeAsync(ContactGoogle1, ContactGoogle2, ContactGoogle3);
                 Company microsoft = new Company
                 {
                     CompanyLegalName = "microsoft",
@@ -111,6 +228,8 @@ namespace CRM.DAL.Data
                     Website = "microsoft.com"
                 };
                 await context.Companies.AddRangeAsync(ACN, ATM, Pay, Ttz, Ttw, google, microsoft);
+
+                
 
                 await context.SaveChangesAsync();
             }

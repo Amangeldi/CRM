@@ -7,11 +7,159 @@
 @using Microsoft.JSInterop
 @using CRM.BLL.DTO
 @using CRM.BLL.Services
+@using System.Threading;
+@using CRM.RAZOR.Models;
+@implements IDisposable
+@inject CRM.BLL.Services.SelectedItemService SelectService
+@inject CRM.BLL.Interfaces.IMailFindService MailFindService
+@inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
 <div class="prospect-finder">
-    info@@ttweb.org <br />
-    info@@turkmen-tranzit.com <br />
+    <!-- The Modal -->
+    <div id="myModal" class="modal" style="display:@ModalDisplay">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" @onclick="Close">&times;</span>
+            <p>Отправить сообщение @checkedContacts.Count людям</p>
+            @if (SendForContacts != null)
+            {
+                @foreach (var contact in SendForContacts)
+                {
+                    @contact.Email <br />
+                }
+            }
+            <button>OK</button><button @onclick="Close">Cancel</button>
+
+        </div>
+
+    </div>
+    @if (SelectedId != 0)
+    {
+        <button>Найти контакты для @CompanyModel.TradingName</button>
+        @if (contacts != null)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">
+                            Найденные контакты @CompanyModel.CompanyLegalName
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in contacts)
+                    {
+                        <tr>
+                            <td>
+                                @contact.Id
+                            </td>
+                            <td>
+                                @contact.Email
+                            </td>
+                            <td>
+                                @if (checkedContacts.Contains(contact.Id))
+                                {
+                                    <input type="checkbox" value="@contact.Id" @onchange="(_=>Check(contact.Id))" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" value="@contact.Id" @onchange="(_=>Check(contact.Id))" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (checkedContacts != null)
+            {
+                <button @onclick="Send">Отправить сообщение @checkedContacts.Count контактам </button>
+            }
+        }
+    }
+
 </div>
 
 @code {
 
+    Timer timer;
+    private CancellationTokenSource _cts = new CancellationTokenSource();
+    public int SelectedId;
+    public CompanyModel CompanyModel;
+    public string ModalDisplay = "none";
+    IEnumerable<ContactDTO> contacts;
+    List<int> checkedContacts;
+    IEnumerable<ContactDTO> SendForContacts;
+    private async Task Check(int value)
+    {
+        if (checkedContacts.Contains(value))
+        {
+            checkedContacts.Remove(value);
+        }
+        else
+        {
+            checkedContacts.Add(value);
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+    private async Task Send()
+    {
+        SendForContacts = await MailFindService.FindContactsForId(checkedContacts.ToArray());
+        ModalDisplay = "block";
+        await InvokeAsync(StateHasChanged);
+    }
+    private async Task Close()
+    {
+        ModalDisplay = "none";
+        await InvokeAsync(StateHasChanged);
+    }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await SelectService.UpdateCompanies();
+        await CompanyMap.UpdateCompanies();
+        checkedContacts = new List<int>();
+        await RenderUpdate();
+        StartCountdown();
+        await base.SetParametersAsync(parameters);
+    }
+
+    public async Task RenderUpdate()
+    {
+        SelectedId = SelectService.GetId();
+        if (SelectedId != 0)
+        {
+            CompanyModel = CompanyMap.companyModels.Where(p => p.Id == SelectedId).FirstOrDefault();
+            contacts = await MailFindService.GetCompanyContacts(SelectedId);
+            await InvokeAsync(StateHasChanged);
+
+        }
+
+        else
+        {
+            CompanyModel = null;
+        }
+    }
+    void StartCountdown()
+    {
+        timer = new Timer(new TimerCallback(async _ =>
+        {
+            try
+            {
+                await RenderUpdate();
+            }
+            catch
+            {
+                _cts.Cancel();
+                timer.Dispose();
+            }
+            await InvokeAsync(StateHasChanged);
+        }), null, 2300, 700);
+    }
+    public void Dispose()
+    {
+        if (timer != null)
+        {
+            timer.Dispose();
+        }
+        _cts.Cancel();
+    }
 }

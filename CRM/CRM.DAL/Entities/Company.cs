@@ -17,5 +17,7 @@ namespace CRM.DAL.Entities
         public CompanyQualification Qualification { get; set; }
         public string Website { get; set; }
         public DateTime QualifiedDate { get; set; }
+
+        public List<CompanyContactLink> CompanyContactLinks { get; set; }
     }
 }

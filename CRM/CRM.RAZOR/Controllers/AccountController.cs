@@ -41,7 +41,7 @@ namespace CRM.RAZOR.Controllers
              await _signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
                 if (result.Succeeded)
                 {
-                    _tempService.CurrentUser = await _userRegistrationService.GetCurrent(model.Email);
+                    //_tempService.CurrentUser = await _userRegistrationService.GetCurrent(model.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 else

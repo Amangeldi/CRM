@@ -44,8 +44,18 @@ header {
 
 .title-new-companies {
     grid-area: title-new-companies;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 1px 1px;
+    grid-template-areas: "titleName titleName titleName titleName titleName titleName plus";
+}
+.titleName {
+    grid-area: titleName;
 }
 
+.plus {
+    grid-area: plus;
+}
 .title-qualified {
     grid-area: title-qualified;
 }
@@ -145,4 +155,30 @@ td {
 }
 th, td {
     border: 1px solid grey;
+}
+
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+.modal-content button {
+    margin-top:15px;
+    margin-left:15px;
 }

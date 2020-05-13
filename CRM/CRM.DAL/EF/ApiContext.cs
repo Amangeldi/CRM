@@ -16,6 +16,9 @@ namespace CRM.DAL.EF
         public DbSet<Region> Regions { get; set; }
         public DbSet<MailMessage> MailMessages { get; set; }
         public DbSet<Email> Emails { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<CompanyContactLink> CompanyContactLinks { get; set; }
+
         public ApiContext(DbContextOptions<ApiContext> options) : base(options)
         {
             Database.EnsureCreated();
