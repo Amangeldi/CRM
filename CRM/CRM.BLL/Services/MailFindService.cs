@@ -41,7 +41,8 @@ namespace CRM.BLL.Services
 
         public async Task<IEnumerable<ContactDTO>> GetCompanyContacts(int CompanyId)
         {
-            IEnumerable<CompanyContactLink> companyContactLinks = await db.CompanyContactLinks.Where(p => p.CompanyId == CompanyId).Include(p=>p.Contact).ToListAsync();
+            IEnumerable<CompanyContactLink> companyContactLinks = await db.CompanyContactLinks.Where(p => p.CompanyId == CompanyId)
+                .Include(p=>p.Contact).ThenInclude(p=>p.Linkedin).ToListAsync();
             List<ContactDTO> contacts = new List<ContactDTO>();
             foreach(var companyContact in companyContactLinks)
             {

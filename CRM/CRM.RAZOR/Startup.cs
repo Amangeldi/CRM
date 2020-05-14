@@ -43,6 +43,8 @@ namespace CRM.RAZOR
             services.AddControllersWithViews();
             services.AddDbContext<ApiContext>(options =>
                 options.UseSqlServer(connection));
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddTransient(typeof(IUserRegistrationService), typeof(UserRegistrationService));
             services.AddTransient(typeof(IRegionService), typeof(RegionService));
             services.AddTransient(typeof(ICountryService), typeof(CountryService));

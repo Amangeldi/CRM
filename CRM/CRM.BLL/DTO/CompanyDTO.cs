@@ -14,5 +14,6 @@ namespace CRM.BLL.DTO
         public int QualificationId { get; set; }
         public string Website { get; set; }
         public DateTime QualifiedDate { get; set; }
+        public int CompanyLinkedinId { get; set; }
     }
 }

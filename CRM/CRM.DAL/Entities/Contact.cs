@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace CRM.DAL.Entities
@@ -8,8 +9,13 @@ namespace CRM.DAL.Entities
     {
         public int Id { get; set; }
         public string Email { get; set; }
+        public string Position { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public int? LinkedinId { get; set; }
+        public Linkedin Linkedin { get; set; }
 
-        public List<Email> Emails { get; set; }
-        public List<CompanyContactLink> CompanyContactLinks { get; set; }
+        public virtual List<Email> Emails { get; set; }
+        public virtual List<CompanyContactLink> CompanyContactLinks { get; set; }
     }
 }

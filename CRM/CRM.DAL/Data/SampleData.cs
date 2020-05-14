@@ -51,7 +51,11 @@ namespace CRM.DAL.Data
                 CompanyQualification NotQualified = new CompanyQualification { QualificationName = "NotQualified" };
                 CompanyQualification NewCompany = new CompanyQualification { QualificationName = "NewCompany" };
                 await context.CompanyQualifications.AddRangeAsync(Qualified, NotQualified, NewCompany);
-
+                Linkedin SlastininLinkedin = new Linkedin { FullLink= "linkedin.com/in/aleksandr-slastinin-379654183/" };
+                Linkedin TTRLinkedin = new Linkedin { FullLink = "linkedin.com/company/turkmen-tranzit/" };
+                Linkedin TTWLinkedin = new Linkedin { FullLink = "linkedin.com/company/ttweb/" };
+                await context.Linkedins.AddRangeAsync(SlastininLinkedin, TTRLinkedin, TTWLinkedin);
+                await context.SaveChangesAsync();
                 Contact contact1 = new Contact { Email = "aojv@mail.ru" };
                 Contact contact2 = new Contact { Email = "kggfpxw@yandex.ru" };
                 Contact contact3 = new Contact { Email = "oxxv@yandex.ru" };
@@ -64,14 +68,29 @@ namespace CRM.DAL.Data
                 Contact contact10 = new Contact { Email = "copaa6@gmail.com" };
                 Contact contact11 = new Contact { Email = "myrfqpb@mail.ru" };
                 Contact contact12 = new Contact { Email = "kc29hc0e@yandex.ru" };
-                Contact TtrContact1 = new Contact { Email = "info@turkmen-tranzit.com" };
+                Contact TtrContact1 = new Contact 
+                { 
+                    Email = "a.slastinin@turkmen -tranzit.com", 
+                    FirstName="Aleksandr", 
+                    Position= "department head", 
+                    Surname="Slastinin",  
+                    Linkedin = SlastininLinkedin
+                    //Linkedin = SlastininLinkedin
+                };
                 Contact TtrContact2 = new Contact { Email = "help@turkmen-tranzit.com" };
                 Contact TtrContact3 = new Contact { Email = "support@turkmen-tranzit.com" };
-                Contact TtwebContact1 = new Contact { Email = "info@ttweb.org" };
+                Contact TtwebContact1 = new Contact 
+                { 
+                    Email = "irada@ttweb.org", 
+                    FirstName="Irada", 
+                    Position="Project Manager" ,
+                    Surname="davletowa",
+                };
                 Contact TtwebContact2 = new Contact { Email = "help@ttweb.org" };
                 Contact TtwebContact3 = new Contact { Email = "support@ttweb.org" };
 
                 await context.Contacts.AddRangeAsync(contact1, contact2, contact3, contact4, contact5, contact6, contact7, contact8, contact9, contact10, contact11, contact12, TtrContact1, TtrContact2, TtrContact3, TtwebContact1, TtwebContact2, TtwebContact3);
+                await context.SaveChangesAsync();
                 Company ACN = new Company 
                 { 
                     CompanyLegalName = "ATM ATM Pty Ltd", 
@@ -80,6 +99,7 @@ namespace CRM.DAL.Data
                     TradingName = "A.C.N." ,
                     Website = "turkmen-tranzit.com"
                 };
+                await context.Companies.AddAsync(ACN);
                 CompanyContactLink ContactACN1 = new CompanyContactLink
                 {
                     Company = ACN,
@@ -106,6 +126,7 @@ namespace CRM.DAL.Data
                     QualifiedDate = DateTime.Now,
                     Website = "ttweb.org"
                 };
+                await context.Companies.AddAsync(ATM);
                 CompanyContactLink ContactATM1 = new CompanyContactLink
                 {
                     Company = ATM,
@@ -131,6 +152,7 @@ namespace CRM.DAL.Data
                     LeadOwner = lead,
                     Website = "24-pay.sk"
                 };
+                await context.Companies.AddAsync(Pay);
                 CompanyContactLink ContactPay1 = new CompanyContactLink
                 {
                     Company = Pay,
@@ -153,8 +175,10 @@ namespace CRM.DAL.Data
                     HGBasedInCountry = TM,
                     Qualification = NewCompany,
                     TradingName = "Turkmen-Tranzit",
-                    Website = "Turkmen-Tranzit.com"
+                    Website = "Turkmen-Tranzit.com",
+                    CompanyLinkedin = TTRLinkedin
                 };
+                await context.Companies.AddAsync(Ttz);
                 CompanyContactLink ContactTtz1 = new CompanyContactLink
                 {
                     Company = Ttz,
@@ -171,14 +195,17 @@ namespace CRM.DAL.Data
                     Contact = TtrContact3
                 };
                 await context.CompanyContactLinks.AddRangeAsync(ContactTtz1, ContactTtz2, ContactTtz3);
+                await context.SaveChangesAsync();
                 Company Ttw = new Company
                 {
                     CompanyLegalName = "HO ''Turkmen-Tranzit'' -> TTWeb",
                     HGBasedInCountry = TM,
                     Qualification = NewCompany,
                     TradingName = "TtWeb",
-                    Website = "Ttweb.org"
+                    Website = "Ttweb.org",
+                    CompanyLinkedin = TTWLinkedin
                 };
+                await context.Companies.AddAsync(Ttw);
                 CompanyContactLink ContactTtw1 = new CompanyContactLink
                 {
                     Company = Ttw,
@@ -195,6 +222,7 @@ namespace CRM.DAL.Data
                     Contact = TtwebContact3
                 };
                 await context.CompanyContactLinks.AddRangeAsync(ContactTtw1, ContactTtw2, ContactTtw3);
+                await context.SaveChangesAsync();
                 Company google = new Company
                 {
                     CompanyLegalName = "google",
@@ -203,6 +231,7 @@ namespace CRM.DAL.Data
                     TradingName = "google",
                     Website = "google.com"
                 };
+                await context.Companies.AddAsync(google);
                 CompanyContactLink ContactGoogle1 = new CompanyContactLink
                 {
                     Company = google,
@@ -227,7 +256,7 @@ namespace CRM.DAL.Data
                     TradingName = "microsoft",
                     Website = "microsoft.com"
                 };
-                await context.Companies.AddRangeAsync(ACN, ATM, Pay, Ttz, Ttw, google, microsoft);
+                await context.Companies.AddAsync(microsoft);
 
                 
 

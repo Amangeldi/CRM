@@ -10,6 +10,6 @@ namespace CRM.DAL.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public List<Log> Logs { get; set; }
+        public virtual List<Log> Logs { get; set; }
     }
 }

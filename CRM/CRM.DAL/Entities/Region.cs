@@ -8,6 +8,6 @@ namespace CRM.DAL.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Country> Countries { get; set; }
+        public virtual List<Country> Countries { get; set; }
     }
 }
