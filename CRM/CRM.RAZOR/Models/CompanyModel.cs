@@ -15,5 +15,6 @@ namespace CRM.RAZOR.Models
         public string QualificationName { get; set; }
         public string Website { get; set; }
         public DateTime QualifiedDate { get; set; }
+        public string CompanyLinkedinFullLink { get; set; }
     }
 }

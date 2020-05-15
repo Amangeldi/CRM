@@ -14,5 +14,8 @@ namespace CRM.BLL.Interfaces
         Task<IEnumerable<ContactDTO>> FindContactsForId(params int[] ContactId);
         Task<IEnumerable<Email>> SendGroupMailMessage(params int[] ContactId);
         Task<IEnumerable<ContactDTO>> GetCompanyContacts(int CompanyId);
+        Task<IEnumerable<ContactDTO>> GetAllContacts();
+        Task<IEnumerable<CompanyContactLink>> GetCompanyContactLinks();
+        Task<ContactDTO> Map(Contact contact);
     }
 }

@@ -7,9 +7,79 @@
 @using Microsoft.JSInterop
 @using CRM.BLL.DTO
 @using CRM.BLL.Services
-<div class="logs">
+@using System.Threading;
+@using CRM.BLL.DTO;
+@inject CRM.BLL.Services.LogTemp LogTemp
+@inject CRM.BLL.Services.TempService TempService
+@implements IDisposable
+    <div class="scroll logs">
+        @if (logs != null)
+        {
+            @foreach (var log in logs)
+            {
+                <div class="log-cell">
+                    <div class="log-user">
+                        @currentUser.Email
+                    </div>
+                    <div class="log-action">
+                        @log.Action
+                    </div>
+                    <div class="log-date">
+                        @log.CreatedDate
+                    </div>
+                </div>
+            }
+        }
 
-</div>
+    </div>
 @code {
+    Timer timer;
+    private CancellationTokenSource _cts = new CancellationTokenSource();
+    public IEnumerable<LogDTO> logs;
+    public GetUserDTO currentUser;
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await RenderUpdate();
+        StartCountdown();
+        await base.SetParametersAsync(parameters);
+    }
+    void StartCountdown()
+    {
+        timer = new Timer(new TimerCallback(async _ =>
+        {
+            try
+            {
+                await RenderUpdate();
+            }
+            catch
+            {
+                _cts.Cancel();
+                timer.Dispose();
+            }
+            await InvokeAsync(StateHasChanged);
+        }), null, 2300, 700);
+    }
+    public async Task RenderUpdate()
+    {
+        if (TempService.CurrentUser != null)
+        {
 
+            currentUser = TempService.CurrentUser;
+            var logTemp = LogTemp.logs;
+            if (logTemp != null)
+            {
+
+                logs = LogTemp.logs.Where(p => p.UserId == currentUser.Id);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        if (timer != null)
+        {
+            timer.Dispose();
+        }
+        _cts.Cancel();
+    }
 }

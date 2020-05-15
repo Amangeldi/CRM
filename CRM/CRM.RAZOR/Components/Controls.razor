@@ -11,6 +11,9 @@
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
 @inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
+@inject CRM.BLL.Interfaces.ILogService logService
+@inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Services.LogTemp LogTemp
 <div class="controls">
     <div class="flex-center not-q-div">
         <button id="i1" @onclick="setNotQualify" disabled="@IsDisabled">Квалификацию не прошёл</button>
@@ -24,7 +27,11 @@
     public bool IsDisabled { get; set; }
     private async void setQualify()
     {
-        await companyService.SetQualified(SelectService.GetId());
+        int companyId = SelectService.GetId();
+        await companyService.SetQualified(companyId);
+
+        var company = await companyService.GetCompany(companyId);
+        await AddLog(true, company.TradingName);
         await SelectService.UpdateCompanies();
         await CompanyMap.UpdateCompanies();
         SelectService.SetId(0);
@@ -33,7 +40,11 @@
     }
     private async void setNotQualify()
     {
-        await companyService.SetNotQualified(SelectService.GetId());
+        int companyId = SelectService.GetId();
+        await companyService.SetNotQualified(companyId);
+
+        var company = await companyService.GetCompany(companyId);
+        await AddLog(false, company.TradingName);
         await SelectService.UpdateCompanies();
         await CompanyMap.UpdateCompanies();
         SelectService.SetId(0);
@@ -46,5 +57,28 @@
         Thread.Sleep(1200);
         IsDisabled = false;
         await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task AddLog(bool IsQualify, string TradingName)
+    {
+        if (IsQualify)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Изменил статус компании " + TradingName + " на Квалифицированный",
+                UserId = TempService.CurrentUser.Id
+            };
+            await logService.AddLog(logDTO);
+        }
+        else
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Изменил статус компании " + TradingName + " на НЕ квалифицированный",
+                UserId = TempService.CurrentUser.Id
+            };
+            await logService.AddLog(logDTO);
+        }
+        await LogTemp.UpdateLogs();
     }
 }

@@ -11,6 +11,6 @@ namespace CRM.BLL.DTO
         public string Position { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
-        public string UserLinkedinId { get; set; }
+        public int LinkedinId { get; set; }
     }
 }

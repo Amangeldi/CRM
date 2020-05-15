@@ -6,7 +6,11 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
+@using CRM.BLL.DTO
 @inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Interfaces.ILogService logService
+@inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Services.LogTemp LogTemp
 
 
 
@@ -14,8 +18,8 @@
     @if (TempService.CurrentUser != null)
     {
         @TempService.CurrentUser.Email <br />
-        <a href="account/logout">Выйти</a>
-        
+        <a @onclick="AddLog" href="account/logout">Выйти</a>
+
     }
     else
     {
@@ -24,5 +28,14 @@
 </div>
 
 @code {
-
+    private async Task AddLog()
+    {
+        LogDTO logDTO = new LogDTO
+        {
+            Action = "Вышел из системы",
+            UserId = TempService.CurrentUser.Id
+        };
+        await logService.AddLog(logDTO);
+        await LogTemp.UpdateLogs();
+    }
 }

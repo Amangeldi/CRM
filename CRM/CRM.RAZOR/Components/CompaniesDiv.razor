@@ -14,6 +14,8 @@
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Services.SelectedItemService SelectService
 @inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Services.LogTemp LogTemp
+@inject CRM.BLL.Interfaces.ILogService LogService
 @code{
     Timer timer;
     private CancellationTokenSource _cts = new CancellationTokenSource();
@@ -74,87 +76,114 @@
         _cts.Cancel();
     }
 }
-    <div class="left" style="grid-template-areas:@LeftStyle">
-        @if (TempService.CurrentUser != null)
-        {
-            <div class="title title-new-companies" @onclick="openNewCompaniesDiv">
-                <span class="titleName">
-                    Новые компании
-                </span>
-                <div class="plus flex-center">
-                    +
-                </div>
+<div class="left" style="grid-template-areas:@LeftStyle">
+    @if (TempService.CurrentUser != null)
+    {
+        <div class="title title-new-companies" @onclick="openNewCompaniesDiv">
+            <span class="titleName">
+                Новые компании
+            </span>
+            <div class="plus flex-center">
+                +
             </div>
-            <div class="content content-new-companies" style="display:@NewCompany">
-                @foreach (var company in NewCompanies)
+        </div>
+        <div class="content content-new-companies" style="display:@NewCompany">
+            @foreach (var company in NewCompanies)
+            {
+                if (company.Id != SelectedId)
                 {
-                    if (company.Id != SelectedId)
-                    {
-                        <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
-                    else
-                    {
-                        <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
+                    <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
                 }
-            </div>
-            <div class="title title-qualified" @onclick="openQualifiedDiv">
-                Квалифицированные
-            </div>
-            <div class="content content-qualified" style="display:@Qualified">
-                @foreach (var company in QualifiedCompanies)
+                else
                 {
-                    if (company.Id != SelectedId)
-                    {
-                        <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
-                    else
-                    {
-                        <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
+                    <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
                 }
-            </div>
-            <div class="title title-not-qualified" @onclick="openNotQualifiedDiv">
-                Не квалифицированные
-            </div>
-            <div class="content content-not-qualified" style="display:@NotQualified">
-                @foreach (var company in NotQualifiedCompanies)
+            }
+        </div>
+        <div class="title title-qualified" @onclick="openQualifiedDiv">
+            Квалифицированные
+        </div>
+        <div class="content content-qualified" style="display:@Qualified">
+            @foreach (var company in QualifiedCompanies)
+            {
+                if (company.Id != SelectedId)
                 {
-                    if (company.Id != SelectedId)
-                    {
-                        <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
-                    else
-                    {
-                        <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
-                            <a href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
-                        </div>
-                    }
+                    <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
                 }
-            </div>
-        }
-        else
-        {
-            <h1>Авторизуйтесь!!!</h1>
-        }
+                else
+                {
+                    <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
+                }
+            }
+        </div>
+        <div class="title title-not-qualified" @onclick="openNotQualifiedDiv">
+            Не квалифицированные
+        </div>
+        <div class="content content-not-qualified" style="display:@NotQualified">
+            @foreach (var company in NotQualifiedCompanies)
+            {
+                if (company.Id != SelectedId)
+                {
+                    <div class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
+                }
+                else
+                {
+                    <div style="background:red" class="company-element" @onclick="@(e=>selectCompanyElement(company.Id))">
+                        <a @onclick="_=>AddLog(WebSite:company.Website)" href="http://@company.Website" target="_blank">@company.CompanyLegalName</a> <br />
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <h1>Авторизуйтесь!!!</h1>
+    }
 
-    </div>
+</div>
 @code{
 
-    private void selectCompanyElement(int id)
+    private async Task selectCompanyElement(int id)
     {
         SelectService.SetId(id);
         SelectedId = id;
+        await AddLog(id);
+
+    }
+    private async Task AddLog(int CompanyId = 0, string WebSite = null)
+    {
+        if (WebSite != null)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Перешел на сайт " + WebSite,
+                UserId = TempService.CurrentUser.Id
+            };
+            await LogService.AddLog(logDTO);
+            Thread.Sleep(3000);
+        }
+        else if (WebSite==null&&CompanyId != 0)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Просмотрел компанию " + SelectService.AllCompanies.Where(p => p.Id == SelectedId).FirstOrDefault().TradingName,
+                UserId = TempService.CurrentUser.Id
+            };
+            await LogService.AddLog(logDTO);
+        }
+        
+        await LogTemp.UpdateLogs();
+         
     }
     private void openNewCompaniesDiv()
     {

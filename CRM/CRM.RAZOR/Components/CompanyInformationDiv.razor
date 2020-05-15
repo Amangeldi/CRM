@@ -16,6 +16,9 @@
 @inject CRM.BLL.Interfaces.ICompanyService companyService
 @inject CRM.BLL.Interfaces.IUserRegistrationService userService
 @inject CRM.BLL.Interfaces.IQualificationService qualificationService
+@inject CRM.BLL.Interfaces.ILogService logService
+@inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Services.LogTemp LogTemp
 @inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
 
 <div class="company-information">
@@ -25,7 +28,7 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="7">
+                    <th colspan="8">
                         @CompanyModel.CompanyLegalName
                     </th>
                 </tr>
@@ -53,6 +56,9 @@
                     <td>
                         Qualificated Date
                     </td>
+                    <td>
+                        Linkedin
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -76,6 +82,16 @@
                     <td>
                         @CompanyModel.QualifiedDate.ToShortDateString();
                     </td>
+                    <td>
+                        @if (CompanyModel.CompanyLinkedinFullLink == null)
+                        {
+                            <p>Отсутствует</p>
+                        }
+                        else
+                        {
+                            <a target="blank" href="http://@CompanyModel.CompanyLinkedinFullLink">Перейти</a>
+                        }
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -87,7 +103,19 @@
     private CancellationTokenSource _cts = new CancellationTokenSource();
     public int SelectedId;
     public CompanyModel CompanyModel;
-
+    private async Task AddLog(string TradingName)
+    {
+        if (TradingName != null)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Просмотрел аккаунт LinkedIn компании  " + TradingName,
+                UserId = TempService.CurrentUser.Id
+            };
+            await logService.AddLog(logDTO);
+        }
+        await LogTemp.UpdateLogs();
+    }
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await SelectService.UpdateCompanies();

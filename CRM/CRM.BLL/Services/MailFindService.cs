@@ -1,4 +1,5 @@
-﻿using CRM.BLL.DTO;
+﻿using AutoMapper;
+using CRM.BLL.DTO;
 using CRM.BLL.Interfaces;
 using CRM.DAL.EF;
 using CRM.DAL.Entities;
@@ -39,6 +40,11 @@ namespace CRM.BLL.Services
             return contacts;
         }
 
+        public async Task<IEnumerable<ContactDTO>> GetAllContacts()
+        {
+            return await MapRange(await db.Contacts.ToListAsync());
+        }
+
         public async Task<IEnumerable<ContactDTO>> GetCompanyContacts(int CompanyId)
         {
             IEnumerable<CompanyContactLink> companyContactLinks = await db.CompanyContactLinks.Where(p => p.CompanyId == CompanyId)
@@ -46,11 +52,7 @@ namespace CRM.BLL.Services
             List<ContactDTO> contacts = new List<ContactDTO>();
             foreach(var companyContact in companyContactLinks)
             {
-                ContactDTO contactDTO = new ContactDTO
-                {
-                    Id = companyContact.ContactId,
-                    Email = companyContact.Contact.Email
-                };
+                ContactDTO contactDTO = await Map(companyContact.Contact);
                 contacts.Add(contactDTO);
             }
             return contacts;
@@ -59,6 +61,24 @@ namespace CRM.BLL.Services
         public async Task<IEnumerable<Email>> SendGroupMailMessage(params int[] ContactId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ContactDTO>> MapRange(IEnumerable<Contact> contacts)
+        { 
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Contact, ContactDTO>()).CreateMapper();
+            IEnumerable<ContactDTO> ContactDTO = mapper.Map<IEnumerable<ContactDTO>>(contacts);
+            return ContactDTO;
+        }
+        public async Task<ContactDTO> Map(Contact contact)
+        {
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Contact, ContactDTO>()).CreateMapper();
+            ContactDTO ContactDTO = mapper.Map<ContactDTO>(contact);
+            return ContactDTO;
+        }
+
+        public async Task<IEnumerable<CompanyContactLink>> GetCompanyContactLinks()
+        {
+            return await db.CompanyContactLinks.Include(p=>p.Contact).ThenInclude(p=>p.Linkedin).ToListAsync();
         }
     }
 }

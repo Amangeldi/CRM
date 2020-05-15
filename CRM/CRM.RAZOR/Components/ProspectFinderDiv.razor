@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
 @using CRM.BLL.DTO
+@using CRM.DAL.Entities
 @using CRM.BLL.Services
 @using System.Threading;
 @using CRM.RAZOR.Models;
@@ -13,6 +14,9 @@
 @inject CRM.BLL.Services.SelectedItemService SelectService
 @inject CRM.BLL.Interfaces.IMailFindService MailFindService
 @inject CRM.RAZOR.Mappings.CompanyMap CompanyMap
+@inject CRM.BLL.Interfaces.ILogService logService
+@inject CRM.BLL.Services.TempService TempService
+@inject CRM.BLL.Services.LogTemp LogTemp
 <div class="prospect-finder">
     <!-- The Modal -->
     <div id="myModal" class="modal" style="display:@ModalDisplay">
@@ -28,7 +32,7 @@
                     @contact.Email <br />
                 }
             }
-            <button>OK</button><button @onclick="Close">Cancel</button>
+            <butto @onclick="async _=>await AddLog(count:SendForContacts.Count())">OK</butto><button @onclick="Close">Cancel</button>
 
         </div>
 
@@ -36,13 +40,42 @@
     @if (SelectedId != 0)
     {
         <button>Найти контакты для @CompanyModel.TradingName</button>
+
+
+        @if (checkedContacts != null)
+        {
+            <button @onclick="Send">Отправить в lemmlist @checkedContacts.Count адресов </button>
+        }
         @if (contacts != null)
         {
             <table>
                 <thead>
                     <tr>
-                        <th colspan="3">
+                        <th colspan="7">
                             Найденные контакты @CompanyModel.CompanyLegalName
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Должность
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Имя
+                        </th>
+                        <th>
+                            Фамилия
+                        </th>
+                        <th>
+                            Linkedin Id
+                        </th>
+                        <th>
+                            Выбрать
                         </th>
                     </tr>
                 </thead>
@@ -54,7 +87,27 @@
                                 @contact.Id
                             </td>
                             <td>
+                                @contact.Position
+                            </td>
+                            <td>
                                 @contact.Email
+                            </td>
+                            <td>
+                                @contact.FirstName
+                            </td>
+                            <td>
+                                @contact.Surname
+                            </td>
+                            <td>
+                                @if (contact.LinkedinId == 0)
+                                {
+                                    <p>Отсутсвует</p>
+                                }
+                                else
+                                {
+                                    Linkedin linkedin = Linkedins.Where(p => p.Id == contact.LinkedinId).FirstOrDefault();
+                                    <a @onclick="async _=> await AddLog(link:linkedin.FullLink)" href="https://@linkedin.FullLink">Перейти</a>
+                                }
                             </td>
                             <td>
                                 @if (checkedContacts.Contains(contact.Id))
@@ -70,10 +123,6 @@
                     }
                 </tbody>
             </table>
-            @if (checkedContacts != null)
-            {
-                <button @onclick="Send">Отправить в lemmlist @checkedContacts.Count адресов </button>
-            }
         }
     }
 
@@ -88,6 +137,7 @@
     public string ModalDisplay = "none";
     IEnumerable<ContactDTO> contacts;
     List<int> checkedContacts;
+    IEnumerable<Linkedin> Linkedins;
     IEnumerable<ContactDTO> SendForContacts;
     private async Task Check(int value)
     {
@@ -100,6 +150,29 @@
             checkedContacts.Add(value);
         }
         await InvokeAsync(StateHasChanged);
+    }
+    private async Task AddLog(int count = 0, string link = null)
+    {
+        if (count != 0)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Добавил " + count + " контактов в lemmlist",
+                UserId = TempService.CurrentUser.Id
+            };
+            await logService.AddLog(logDTO);
+        }
+        if (link != null)
+        {
+            LogDTO logDTO = new LogDTO
+            {
+                Action = "Просмотрел аккаунт LinkedIn пользователя  " + link,
+                UserId = TempService.CurrentUser.Id
+            };
+            await logService.AddLog(logDTO);
+        }
+        await LogTemp.UpdateLogs();
+
     }
     private async Task Send()
     {
@@ -128,7 +201,8 @@
         if (SelectedId != 0)
         {
             CompanyModel = CompanyMap.companyModels.Where(p => p.Id == SelectedId).FirstOrDefault();
-            contacts = await MailFindService.GetCompanyContacts(SelectedId);
+            contacts = await SelectService.GetCompanyContacts(SelectedId);
+            Linkedins = SelectService.Linkedins;
             await InvokeAsync(StateHasChanged);
 
         }

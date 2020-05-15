@@ -51,7 +51,9 @@ namespace CRM.RAZOR
             services.AddTransient(typeof(IQualificationService), typeof(QualificationService));
             services.AddTransient(typeof(ICompanyService), typeof(CompanyService));
             services.AddTransient(typeof(IMailFindService), typeof(MailFindService));
+            services.AddTransient(typeof(ILogService), typeof(LogService));
             services.AddScoped<SelectedItemService>();
+            services.AddScoped<LogTemp>();
             services.AddTransient<CompanyMap>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddSignalR();

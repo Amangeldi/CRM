@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.BLL.DTO;
 using CRM.BLL.Interfaces;
+using CRM.DAL.EF;
 using CRM.RAZOR.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,16 +17,18 @@ namespace CRM.RAZOR.Mappings
         readonly ICountryService countryServ;
         readonly IUserRegistrationService userRegistrationServ;
         readonly IQualificationService qualificationServ;
+        readonly ApiContext db;
         private readonly IServiceScopeFactory serviceScopeFactory;
         public CompanyMap(ICompanyService companyService, ICountryService countryService,
             IUserRegistrationService userRegistrationService, IQualificationService qualificationService,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory, ApiContext context)
         {
             userRegistrationServ = userRegistrationService;
             qualificationServ = qualificationService;
             countryServ = countryService;
             companyServ = companyService;
             this.serviceScopeFactory = serviceScopeFactory;
+            db = context;
         }
         public IEnumerable<CompanyModel> companyModels;
         public async Task UpdateCompanies()
@@ -40,6 +43,14 @@ namespace CRM.RAZOR.Mappings
                     var QualificationName = Qualifications.Where(p => p.Id == company.QualificationId).FirstOrDefault().QualificationName;
                     var lead = await userRegistrationServ.GetUserFullName(company.LeadOwnerId);
                     var country = await countryServ.GetCountry(company.HGBasedInCountryId);
+
+                    string linkedinLink = null;
+                    if(company.CompanyLinkedinId!=0)
+                    {
+                        var linkedin = await db.Linkedins.FindAsync(company.CompanyLinkedinId);
+                        linkedinLink = linkedin.FullLink;
+
+                    }
                     CompanyModel companyModel = new CompanyModel
                     {
                         CompanyLegalName = company.CompanyLegalName,
@@ -49,7 +60,8 @@ namespace CRM.RAZOR.Mappings
                         QualificationName = QualificationName,
                         QualifiedDate = company.QualifiedDate,
                         TradingName = company.TradingName,
-                        Website = company.Website
+                        Website = company.Website,
+                        CompanyLinkedinFullLink = linkedinLink
                     };
                     companies.Add(companyModel);
                 }
